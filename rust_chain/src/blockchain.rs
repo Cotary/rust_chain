@@ -5,6 +5,11 @@ pub struct Blockchain {
 }
 
 impl Blockchain {
+
+    pub fn new()->Self{
+        let genesis_block = new_genesis_block();
+        Blockchain { blocks: vec![genesis_block] }
+    }
     pub fn add_block(&mut self, data: String) {
         let prev_block = self.blocks.last().unwrap();
         let new_block = Block::new(data.as_bytes().to_vec(), prev_block.hash.clone());

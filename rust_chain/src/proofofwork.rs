@@ -5,17 +5,18 @@ use crypto::digest::Digest;
 use crypto::sha2::Sha256;
 use std::hash::{Hash, Hasher};
 use std::collections::hash_map::DefaultHasher;
-const MAX_NONCE: i64 = std::i64::MAX;
-const TARGET_BITS: u8 = 24;
-pub struct ProofOfWork{
-    block:&'static Block,
-    target:u128,
-
+const MAX_NONCE: i64 = i64::MAX;
+const TARGET_BITS: u8 = 50;
+pub struct ProofOfWork<'a> {
+    block: &'a Block,
+    target: u128,
 }
 
-impl ProofOfWork {
-   pub fn new(block: &'static Block) -> Self {
-        let target = 1u128 << (255 - TARGET_BITS);
+
+impl<'a> ProofOfWork<'a> {
+    pub fn new(block: &'a Block) -> Self {
+       let target = 1u128.checked_shl(128 - TARGET_BITS as u32).unwrap_or(0);
+        println!("target:{target}");
         Self {block, target }
     }
     pub fn prepare_data(&self, nonce: i64) -> Vec<u8> {
