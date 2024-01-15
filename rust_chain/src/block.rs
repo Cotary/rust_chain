@@ -3,6 +3,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use crypto::digest::Digest;
 use crypto::sha2::Sha256;
 
+#[derive(Debug)]
 pub struct  Block {
     pub timestamp: u64,
     pub data: Vec<u8>,
@@ -17,7 +18,7 @@ impl Block {
             timestamp,
             data,
             prev_block_hash,
-            hash: vec![],
+            hash: Vec::new(),
         };
         block.set_hash();
         block
@@ -27,13 +28,11 @@ impl Block {
         hasher.input(&self.prev_block_hash);
         hasher.input(&self.data);
         hasher.input(self.timestamp.to_string().as_bytes());
-        hasher.result(&mut self.hash);
+        //hasher.result(&mut self.hash); todo 这段代码为啥不行
+        self.hash=hasher.result_str().as_bytes().to_vec();
+
     }
 }
-// NewGenesisBlock creates and returns genesis Block
-// func NewGenesisBlock() *Block {
-// return NewBlock("Genesis Block", []byte{})
-// }
 
 pub fn new_genesis_block() -> Block {
     return Block::new(b"Genesis Block".to_vec(), vec![]);
