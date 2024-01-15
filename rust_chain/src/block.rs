@@ -2,6 +2,7 @@
 use std::time::{SystemTime, UNIX_EPOCH};
 use crypto::digest::Digest;
 use crypto::sha2::Sha256;
+use crate::proofofwork::ProofOfWork;
 
 #[derive(Debug)]
 pub struct  Block {
@@ -9,6 +10,7 @@ pub struct  Block {
     pub data: Vec<u8>,
     pub prev_block_hash: Vec<u8>,
     pub hash: Vec<u8>,
+    pub nonce:i64,
 }
 
 impl Block {
@@ -19,8 +21,12 @@ impl Block {
             data,
             prev_block_hash,
             hash: Vec::new(),
+            nonce:0
         };
-        block.set_hash();
+        let mut pow =ProofOfWork::new(&block);
+        let (nonce,hash) =pow.run();
+        block.hash=hash;
+        block.nonce=nonce;
         block
     }
     pub  fn set_hash(&mut self) {

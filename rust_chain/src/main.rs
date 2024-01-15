@@ -2,6 +2,8 @@ use crate::blockchain::new_block_chain;
 
 mod blockchain;
 mod block;
+mod proofofwork;
+mod utils;
 
 fn main() {
     let mut bc=new_block_chain();
