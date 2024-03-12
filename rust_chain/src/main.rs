@@ -1,15 +1,33 @@
-use crate::blockchain::new_block_chain;
-
-mod blockchain;
-mod block;
+use std::{
+    fs,
+    io::{prelude::*, BufReader},
+    net::{TcpListener, TcpStream},
+    thread,
+    time::Duration,
+};
 
 fn main() {
-    let mut bc=new_block_chain();
-    bc.add_block(String::from("Send 1 BTC to Ivan"));
-    bc.add_block(String::from("Send 2 more BTC to Ivan"));
+    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
 
-    for (k,v)in bc.blocks.iter().enumerate(){
-        println!("{:#?},{:#?}",k,v);
+    for stream in listener.incoming() {
+        let stream = stream.unwrap();
+
+        handle_connection(stream);
     }
+}
 
+
+fn handle_connection(mut stream: TcpStream) {
+    // --snip--
+
+    let (status_line, filename) = match &request_line[..] {
+        "GET / HTTP/1.1" => ("HTTP/1.1 200 OK", "hello.html"),
+        "GET /sleep HTTP/1.1" => {
+            thread::sleep(Duration::from_secs(5));
+            ("HTTP/1.1 200 OK", "hello.html")
+        }
+        _ => ("HTTP/1.1 404 NOT FOUND", "404.html"),
+    };
+
+    // --snip--
 }
