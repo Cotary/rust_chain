@@ -34,7 +34,7 @@ impl Block {
         hasher.input(&self.prev_block_hash);
         hasher.input(&self.data);
         hasher.input(self.timestamp.to_string().as_bytes());
-        //hasher.result(&mut self.hash); todo 这段代码为啥不行
+       // hasher.result(&mut self.hash);// todo 这段代码为啥不行
         self.hash=hasher.result_str().as_bytes().to_vec();
 
     }
