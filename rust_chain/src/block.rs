@@ -4,7 +4,7 @@ use crypto::digest::Digest;
 use crypto::sha2::Sha256;
 use crate::proofofwork::ProofOfWork;
 
-#[derive(Debug)]
+#[derive(Debug,Clone)]
 pub struct  Block {
     pub timestamp: u64,
     pub data: Vec<u8>,
@@ -23,7 +23,7 @@ impl Block {
             hash: Vec::new(),
             nonce:0
         };
-        let mut pow =ProofOfWork::new(&block);
+        let mut pow =ProofOfWork::new(block.clone());
         let (nonce,hash) =pow.run();
         block.hash=hash;
         block.nonce=nonce;

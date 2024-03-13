@@ -7,17 +7,17 @@ use std::hash::{Hash, Hasher};
 use std::collections::hash_map::DefaultHasher;
 const MAX_NONCE: i64 = i64::MAX;
 const TARGET_BITS: u8 = 50;
-pub struct ProofOfWork<'a> {
-    block: &'a Block,
+pub struct ProofOfWork{
+    block: Box<Block> ,
     target: u128,
 }
 
 
-impl<'a> ProofOfWork<'a> {
-    pub fn new(block: &'a Block) -> Self {
+impl ProofOfWork {
+    pub fn new(block:  Block) -> Self {
        let target = 1u128.checked_shl(128 - TARGET_BITS as u32).unwrap_or(0);
         println!("target:{target}");
-        Self {block, target }
+        Self {block:Box::new(block), target }
     }
     pub fn prepare_data(&self, nonce: i64) -> Vec<u8> {
         vec![
